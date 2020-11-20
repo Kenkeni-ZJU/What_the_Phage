@@ -689,11 +689,16 @@ workflow identify_fasta_MSF {
                         .filter { it != 'deactivated' } // removes deactivated tool channels
                         .groupTuple()
                         
-            filter_tool_names(results) 
+            filter_tool_names(results).map { it -> tuple(it[0], it[1]) }.view()
+            // mapping so I can get the filtered output for the granular map
+            // 0 baseName
+            // 1 heatmap output2
+            // 2 granular output
                                                
         //plotting results
             r_plot(filter_tool_names.out)
             upsetr_plot(filter_tool_names.out)
+            // granular_
         //samtools 
             samtools(fasta_validation_wf.out.join(filter_tool_names.out))
 
@@ -719,11 +724,12 @@ workflow identify_fastq_MSF {
                     .filter { it != 'deactivated' } // removes deactivated tool channels
                     .groupTuple()
         
-        filter_tool_names(results) 
+        filter_tool_names(results)
 
     //plotting results
         r_plot_reads(parse_reads(results))
         upsetr_plot(filter_tool_names.out)
+
     
     //samtools
         // COMMENT: all fastas have the same name which does name collision 

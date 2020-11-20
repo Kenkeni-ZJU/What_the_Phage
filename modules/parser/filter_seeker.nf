@@ -3,10 +3,11 @@ process filter_seeker {
     input:
         tuple val(name), file(results) 
     output:
-        tuple val(name), file("seeker_*.txt")
+        tuple val(name), path("seeker_*.txt"), path("granular-map_seeker_*.csv")
     shell:
         """
         tail -n+2 *.list | sort -gr -k3  | awk '\$3>=${params.sk_filter}' | awk '{ print \$1 }'  > seeker_\${PWD##*/}.txt
+        tail -n+2 *.list | sort -gr -k3  | awk '\$3>=${params.sk_filter}' | awk '{ print \$1, \$3}' OFS='\t' > granular-map_seeker_\${PWD##*/}.csv
         """
 }
 

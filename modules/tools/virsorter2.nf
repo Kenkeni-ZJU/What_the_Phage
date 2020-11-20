@@ -8,7 +8,7 @@ process virsorter2 {
         tuple val(name), path("virsorter2_*.out")
     script:
         """
-        virsorter run -w virsorter2_\${PWD##*/}.out -i ${fasta}  -j ${task.cpus}
+        virsorter run -w virsorter2_\${PWD##*/}.out -i ${fasta} -j ${task.cpus}
         """
 }
 
